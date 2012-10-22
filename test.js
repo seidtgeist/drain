@@ -65,6 +65,47 @@ buster.testCase('ox', {
       assert.equals(state, {a: 23, b: 42});
       done();
     });
+  },
+
+  'crazy drain': function(done) {
+    this.timeout = 10000;
+
+    function lwc(name, wait) {
+      return function(state, callback) {
+        console.log(name + ' called, waiting' + wait);
+        state[name] = 'took ' + wait;
+        setTimeout(callback, wait);
+      };
+    }
+
+    var WAT = {
+      a0: lwc('a0', 100),
+      a1: lwc('a1', 200),
+      a2: lwc('a2', 400),
+      a3: lwc('a3', 800),
+
+      b: ['a0', 'a1', lwc('b', 3000)],
+
+      c: ['a2', 'a3', lwc('c', 2000)],
+
+      d: ['b', 'c', lwc('d', 100)],
+
+      e: ['a0', 'd', lwc('e', 100)]
+    };
+
+    drain(WAT)(function(state) {
+      assert.equals(state, {
+        a0: 'took 100',
+        a1: 'took 200',
+        a2: 'took 400',
+        a3: 'took 800',
+        b: 'took 3000',
+        c: 'took 2000',
+        d: 'took 100',
+        e: 'took 100'
+      });
+      done();
+    });
   }
 });
 
