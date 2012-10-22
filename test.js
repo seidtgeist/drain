@@ -32,7 +32,7 @@ buster.testCase('ox', {
 
   'drain': function(done) {
     var fns = {
-      a: function(state, callback) { state.a = 23; setTimeout(callback); },
+      a: function(state, callback) { state.a = 23; callback(); },
       b: function(state, callback) { state.b = state.a + 19; callback(); }
     };
 
