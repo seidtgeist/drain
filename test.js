@@ -28,8 +28,44 @@ buster.testCase('ox', {
       c: ['b'],
       d: ['b', 'c']
     });
+  },
+
+  'drain': function(done) {
+    var fns = {
+      a: function(state, callback) { state.a = 23; setTimeout(callback); },
+      b: function(state, callback) { state.b = state.a + 19; callback(); }
+    };
+
+    var work = {
+      a: [],
+      b: ['a']
+    };
+
+    drain(fns, work)(function(state) {
+      assert.equals(state, {a: 23, b: 42});
+      done();
+    });
   }
 });
+
+function drain(fns, work) {
+  var state = {};
+
+  return function checkWork(callback) {
+    if (_.isEmpty(work))
+      return callback(state);
+
+    var next = findReady(work);
+
+    _.forEach(next, function(name) {
+      var fn = fns[name];
+      fn(state, function() {
+        work = removeCompleted(name, work);
+        checkWork(callback);
+      });
+    });
+  };
+}
 
 function findReady(work) {
   return _.reduce(work, function(ready, dependencies, name) {
