@@ -30,25 +30,68 @@ buster.testCase('ox', {
     });
   },
 
+  'ohMyDsl': function() {
+    var input = {
+      a: function() {},
+      b: ['a', function() {}]
+    };
+
+    assert.equals(ohMyDsl(input), {
+      fns: {
+        a: input.a,
+        b: input.b[1]
+      },
+      work: {
+        a: [],
+        b: ['a']
+      }
+    });
+  },
+
   'drain': function(done) {
-    var fns = {
-      a: function(state, callback) { state.a = 23; callback(); },
-      b: function(state, callback) { state.b = state.a + 19; callback(); }
+    var WAT = {
+      a: function(state, callback) {
+        state.a = 23;
+        callback();
+      },
+
+      b: ['a', function(state, callback) {
+        state.b = state.a + 19;
+        callback();
+      }]
     };
 
-    var work = {
-      a: [],
-      b: ['a']
-    };
-
-    drain(fns, work)(function(state) {
+    drain(WAT)(function(state) {
       assert.equals(state, {a: 23, b: 42});
       done();
     });
   }
 });
 
-function drain(fns, work) {
+function ohMyDsl(nice) {
+  return _.reduce(nice, function(proper, value, name) {
+    var fn, deps;
+
+    if (_.isFunction(value)) {
+      fn = value;
+      deps = [];
+    } else {
+      fn = value[value.length - 1];
+      deps = value.slice(0, value.length - 1);
+    }
+
+    proper.fns[name] = fn;
+    proper.work[name] = deps;
+
+    return proper;
+  }, {fns: {}, work: {}});
+}
+
+function drain(args) {
+  var derp = ohMyDsl(args);
+  var fns = derp.fns;
+  var work = derp.work;
+  
   var state = {};
 
   return function checkWork(callback) {
