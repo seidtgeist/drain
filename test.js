@@ -91,19 +91,22 @@ function drain(args) {
   var derp = ohMyDsl(args);
   var fns = derp.fns;
   var work = derp.work;
-  
+
+  var pending = [];
   var state = {};
 
   return function checkWork(callback) {
-    if (_.isEmpty(work))
+    if (_.isEmpty(work) && _.isEmpty(pending))
       return callback(state);
 
     var next = findReady(work);
 
     _.forEach(next, function(name) {
       var fn = fns[name];
+      work = removeCompleted(name, work);
+      pending.push(name);
       fn(state, function() {
-        work = removeCompleted(name, work);
+        pending = _.without(pending, name);
         checkWork(callback);
       });
     });
