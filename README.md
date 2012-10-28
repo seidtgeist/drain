@@ -23,7 +23,7 @@ drain(dag)(function(state) {
 
 ~~~ js
 var dag = {
-  a: function(state, callback) {
+  a: function(callback) {
     callback(23);
   },
 
