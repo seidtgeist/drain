@@ -37,3 +37,6 @@ drain(dag)(function(result) {
   // 42
 }
 ~~~
+
+- Because if anyone wanted a shared `state` var it could
+  also be accomplished via `var state` in a parent scope
