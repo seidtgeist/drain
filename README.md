@@ -18,3 +18,22 @@ drain(dag)(function(state) {
   // { a: 23, b: 42 }
 }
 ~~~
+
+## Or like this?
+
+~~~ js
+var dag = {
+  a: function(state, callback) {
+    callback(23);
+  },
+
+  b: ['a', function(aResult, callback) {
+    callback(aResult + 19);
+  }]
+};
+
+drain(dag)(function(result) {
+  console.log(result);
+  // 42
+}
+~~~
