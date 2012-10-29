@@ -1,7 +1,7 @@
 # drain
 
 ~~~ js
-var dag = {
+var tree = {
   a: function(state, callback) {
     state.a = 23;
     callback();
@@ -13,7 +13,7 @@ var dag = {
   }]
 };
 
-drain(dag)(function(state) {
+drain(tree)(function(state) {
   console.log(state);
   // { a: 23, b: 42 }
 }
@@ -22,7 +22,7 @@ drain(dag)(function(state) {
 ## Or like this?
 
 ~~~ js
-var dag = {
+var tree = {
   a: function(callback) {
     callback(23);
   },
@@ -32,7 +32,7 @@ var dag = {
   }]
 };
 
-drain(dag)(function(result) {
+drain(tree)(function(result) {
   console.log(result);
   // 42
 }
