@@ -1,5 +1,7 @@
 # drain
 
+[![Build Status](https://secure.travis-ci.org/evilhackerdude/drain.png)](http://travis-ci.org/evilhackerdude/drain)
+
 ~~~ js
 var tree = {
   a: function(state, callback) {
