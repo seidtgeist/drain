@@ -1,0 +1,20 @@
+{
+  "name": "drain",
+  "version": "0.0.0",
+  "description": "Declarative control flow",
+  "main": "test.js",
+  "dependencies": {
+    "buster": "~0.6.2",
+    "lodash": "~0.8.2"
+  },
+  "devDependencies": {},
+  "scripts": {
+    "test": "node test.js"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git://github.com/evilhackerdude/drain.git"
+  },
+  "author": "Stephan Seidt <evilhackerdude@gmail.com>",
+  "license": "MIT"
+}
