@@ -2,6 +2,8 @@
 
 [![Build Status](https://secure.travis-ci.org/evilhackerdude/drain.png)](http://travis-ci.org/evilhackerdude/drain)
 
+## Current API
+
 ~~~ js
 var tree = {
   a: function(state, callback) {
@@ -21,7 +23,7 @@ drain(tree)(function(state) {
 }
 ~~~
 
-## Or like this?
+## Future API
 
 ~~~ js
 var tree = {
@@ -42,7 +44,7 @@ drain(tree)(function(result) {
 
 - Because if anyone wanted a shared `state` var it could
   also be accomplished via `var state` in a parent scope
-- Also problem with the above: Everything ends up in one big
+- Also problem with the current API: Everything ends up in one big
   object unless state is managed very carefully & manually
   -> potential heap size problems. With individual results
   passed in and possibly fully consumed the risk is far lower.
