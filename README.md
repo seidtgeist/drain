@@ -42,3 +42,7 @@ drain(tree)(function(result) {
 
 - Because if anyone wanted a shared `state` var it could
   also be accomplished via `var state` in a parent scope
+- Also problem with the above: Everything ends up in one big
+  object unless state is managed very carefully & manually
+  -> potential heap size problems. With individual results
+  passed in and possibly fully consumed the risk is far lower.
