@@ -33,13 +33,14 @@ var tree = {
 
   b: ['a', function(aResult, callback) {
     callback(aResult + 19);
-  }]
+  }],
+
+  final: ['b', function(bResult) {
+    console.log(result); // 42
+  });
 };
 
-drain(tree)(function(result) {
-  console.log(result);
-  // 42
-}
+drain(tree)();
 ~~~
 
 - Because if anyone wanted a shared `state` var it could
@@ -48,3 +49,10 @@ drain(tree)(function(result) {
   object unless state is managed very carefully & manually
   -> potential heap size problems. With individual results
   passed in and possibly fully consumed the risk is far lower.
+- The "final" callback argument to drain doesn't make any sense if
+  the explicit state var is removed. Must now be part of the tree.
+- Does it make sense to parameterize drain other than just wrapping
+  a work-tree in a function and using lex. scope? (could avoid GC issues?)
+  With parameterization, who'd get parameters, what would be the entry point?
+- Without parameterization, does it make sense to immediately execute on `drain(tree)`
+  instead of returning a function for (possibly) later execution?
